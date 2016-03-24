@@ -70,6 +70,8 @@ Fsend: ;Final subroutine, that takes in the variable strings, checks that toggle
 			IfWinActive Spiceworks ;Check if Spiceworks widow is open.
 			{
 				;Take inputs from the variables in the subrotines, and appends them to a final Send string that fills the web form, using tabs to skip fields.
+				SendInput n
+				Sleep 1000
 				SendInput %vSuma% {Tab} %vDesc% {Tab} Chris Roth {Tab 7} %vCata% {Tab 3} %vMyLoc% {Tab 3} %vSubc% {Tab 3} On-Site {Tab 3} Patron {Tab 7}
 				Return
 			}
