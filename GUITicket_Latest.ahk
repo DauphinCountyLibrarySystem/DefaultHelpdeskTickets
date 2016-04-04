@@ -2,35 +2,27 @@
 						***SPICEWORKS AUTO-TICKET APP***
 	App for the automatic completion and submission of common helpdesk tickets.
 	Author: Christopher Roth
-	Version: 2.6 (3.24.16)
-	Version Notes:
-	* Testing branch toggle check in final array and active window check. 3.22.16
-	* Implemented toggled check and active window check in final subroutine 3.24.16
-	* Spelling checks and interface clean up 3.24.16
+	Last Edits: 4.4.16
 */
-
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-
-;Initialize GUI and Global Variables
-vMyLoc := null
+;-----Initialize GUI and Global Variables-----
+arBrnch := {1: "ESA", 2: "KL", 3: "MOM", 4: "MRL", 5: "AFL", 6: "JOH", 7: "EV", 8: "ND"} ;Array containg library branch locations
 Gui, New, , Common Helpdesk Tickets
-
 ;This section creates a toggle for Library locations.
 Gui, Font, Bold s10
 Gui, Add, GroupBox, r8, Select Branch:
 Gui, Font, Norm
-Gui, Add, Radio, altsubmit gSetloc vBranch xp+10 yp+20, East Shore
-Gui, Add, Radio, altsubmit gSetloc, Kline Library
-Gui, Add, Radio, altsubmit gSetloc, Madeline Olewine
-Gui, Add, Radio, altsubmit gSetloc, McCormick Riverfront
-Gui, Add, Radio, altsubmit gSetloc, Alexander Family
-Gui, Add, Radio, altsubmit gSetloc, Johnson Memorial
-Gui, Add, Radio, altsubmit gSetloc, Elizabethville
-Gui, Add, Radio, altsubmit gSetloc, Northern Dauphin
-
+Gui, Add, Radio, altsubmit vBranch xp+10 yp+20, East Shore
+Gui, Add, Radio, altsubmit, Kline Library
+Gui, Add, Radio, altsubmit, Madeline Olewine
+Gui, Add, Radio, altsubmit, McCormick Riverfront
+Gui, Add, Radio, altsubmit, Alexander Family
+Gui, Add, Radio, altsubmit, Johnson Memorial
+Gui, Add, Radio, altsubmit, Elizabethville
+Gui, Add, Radio, altsubmit, Northern Dauphin
 ;This section creates buttons for common tickets.
 Gui, Font, Bold
 Gui, Add, Text, ym, Select Ticket Type:
@@ -48,34 +40,39 @@ Gui, Add, Button, gBread w100, E-Reader
 Gui, Add, Button, gBscan w100, Scanner
 Gui, Add, Button, gBwprt w100, Wi-Fi Print
 Gui, Show, AutoSize
-Return ;End of initialization, and creates GUI.
-
-Setloc: ;Subroutine to change branch location when radio toggle is selected.
-	{
-		Gui, Submit, NoHide
-		arBrnch := {1: "ESA", 2: "KL", 3: "MOM", 4: "MRL", 5: "AFL", 6: "JOH", 7: "EV", 8: "ND"}
-		vMyLoc := arBrnch[Branch]
-		Return
-	}
+InputBox,vUser, Log In, Please enter your full user name:, HIDE ;Recieves HDA name for final ticket, allows for multiple users.
+Return
+;-----Initialization complete, generate GUI.-----
+;Setloc: ;Subroutine to change branch location when radio toggle is selected.
+	;{
+	;	Gui, Submit, NoHide
+	;	vMyLoc := arBrnch[Branch]
+	;	Return
+	;}
 Fsend: ;Final subroutine, that takes in the variable strings, checks that toggles and windows are active, and submits the result to the new ticket form.
 	{
-		if (vMyLoc = null) ;Check if branch location was properly toggled on.
+		Gui, Submit, NoHide
+		if (Branch == 0) ;Check if branch location was properly toggled on.
 		{	
 			MsgBox, 48, No Library, Please select your library branch.
 			Return
 		}
 		else
 		{
+			vMyLoc := arBrnch[Branch]
 			WinActivate Spiceworks
+			Sleep 500
 			IfWinActive Spiceworks ;Check if Spiceworks widow is open.
-			{
+			{ 
 				;Take inputs from the variables in the subrotines, and appends them to a final Send string that fills the web form, using tabs to skip fields.
-				SendInput %vSuma% {Tab} %vDesc% {Tab} Chris Roth {Tab 7} %vCata% {Tab 3} %vMyLoc% {Tab 3} %vSubc% {Tab 3} On-Site {Tab 3} Patron {Tab 7}
+				SendInput n ;Spiceworks shortcut for new ticket window.
+				Sleep 1000
+				SendInput %vSuma% {Tab} %vDesc% {Tab} %vUser% {Tab 7} %vCata% {Tab 3} %vMyLoc% {Tab 3} %vSubc% {Tab 3} On-Site {Tab 3} Patron {Tab 7}
 				Return
 			}
 			else
 			{	
-				MsgBox, 48, New Ticket, Please open a new Spiceworks ticket window.
+				MsgBox, 48, Spiceworks Offline, Please open a new Spiceworks web interface window.
 				Return
 			}
 		}
