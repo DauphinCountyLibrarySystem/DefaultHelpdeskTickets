@@ -8,9 +8,11 @@
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-;==========VARIABLE DECLARATION==========
-aBranches := {1: "ESA", 2: "KL", 3: "MOM", 4: "MRL", 5: "AFL", 6: "JOH", 7: "EV", 8: "ND"} ;Array containg library branch locations
 
+;==========VARIABLE DECLARATION==========
+SplitPath, A_ScriptName, , , , ScriptBasename ; for Log fucntion
+StringReplace, AppTitle, ScriptBasename, _, %A_SPACE%, All ; For Log function
+aBranches := {1: "ESA", 2: "KL", 3: "MOM", 4: "MRL", 5: "AFL", 6: "JOH", 7: "EV", 8: "ND"} ;Array containg library branch locations
 vCopierTally := 0
 vEmailTally := 0
 vEreaderTally := 0
@@ -94,7 +96,8 @@ Fsend: ;Final subroutine, that takes in the variable strings, checks that toggle
 	}
 Return
 Bprnt: ;Subroutine for Printing button.
-	{
+	{	
+		vPrintTally +=
 		vSuma := "Release a Print"
 		vDesc := "Showed a patron how to print a document and release it from the Print Release Station."
 		vCata := "Training"
@@ -104,6 +107,7 @@ Bprnt: ;Subroutine for Printing button.
 	}
 Blogn: ;Subroutine for Login button.
 	{
+		vLoginTally +=
 		vSuma := "Login to Envisionware"
 		vDesc := "Helped a patron with logging into Envisionware."
 		vCata := "Software"
@@ -113,6 +117,7 @@ Blogn: ;Subroutine for Login button.
 	}
 Bwifi: ;Subroutine for Wi-Fi button.
 	{
+		vWifiConnectTally +=
 		vSuma := "Connect to Wi-Fi"
 		vDesc := "Helped a patron bypass the certificate error and connect to public wi-fi."
 		vCata := "Network"
@@ -122,6 +127,7 @@ Bwifi: ;Subroutine for Wi-Fi button.
 	}
 Bwebs: ;Subroutine for website assistance button.
 	{
+		vWebAssistTally +=
 		vSuma := "Website Assistance"
 		vDesc := "Assisted a patron with navigating a web interface."
 		vCata := "Training"
@@ -131,6 +137,7 @@ Bwebs: ;Subroutine for website assistance button.
 	}
 Bsoft: ;Subroutine for Software button.
 	{
+		vSoftwareAssistTally +=
 		vSuma := "Default Software"
 		vDesc := "Showed a patron how to use some of the more advanced features of our default software."
 		vCata := "Training"
@@ -140,6 +147,7 @@ Bsoft: ;Subroutine for Software button.
 	}
 Bcopy: ;Subroutine for copier button.
 	{
+		vCopierTally +=
 		vSuma := "Copier Assistance"
 		vDesc := "Helped a patron with copier functions."
 		vCata := "Hardware"
@@ -149,6 +157,7 @@ Bcopy: ;Subroutine for copier button.
 	}	
 Bmail: ;Subroutine for e-mail button.
 	{
+		
 		vSuma := "E-Mail Assistance"
 		vDesc := "Helped a patron with e-mail functions."
 		vCata := "Training"
@@ -201,5 +210,12 @@ Bwprt: ;Subroutine for print from anywhere.
 		Gosub, Fsend
 		Return
 	}
+Log(msg)
+{
+	global ScriptBasename, AppTitle
+	FileAppend, %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%.%A_MSec%%A_Tab%%msg%`n, %ScriptBasename%.log
+	Sleep 50 ; Hopefully gives the filesystem time to write the file before logging again
+	Return
+}
 GuiClose:
 	ExitApp 
