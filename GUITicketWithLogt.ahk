@@ -26,6 +26,11 @@ vWebAssistTally := 0
 vWifiConnectTally := 0
 vWifiPrintTally := 0
 
+;==========INITIALIZING==========
+InputBox,vUser, Log In, Please enter your full user name: ;Recieves HDA name for final ticket, allows for multiple users.
+Log("Starting ticket tracking for user: "%vUser%)
+
+;==========GUI GENERATION==========
 Gui, New, , Common Helpdesk Tickets
 ;This section creates a toggle for Library locations.
 Gui, Font, Bold s10
@@ -56,48 +61,42 @@ Gui, Add, Button, gBread w100, E-Reader
 Gui, Add, Button, gBscan w100, Scanner
 Gui, Add, Button, gBwprt w100, Wi-Fi Print
 Gui, Show, AutoSize
-InputBox,vUser, Log In, Please enter your full user name:, HIDE ;Recieves HDA name for final ticket, allows for multiple users.
 Return
-;-----Initialization complete, generate GUI.-----
-;Setloc: ;Subroutine to change branch location when radio toggle is selected.
-	;{
-	;	Gui, Submit, NoHide
-	;	vMyLoc := aBranches[Branch]
-	;	Return
-	;}
+
 Fsend: ;Final subroutine, that takes in the variable strings, checks that toggles and windows are active, and submits the result to the new ticket form.
+{
+	Gui, Submit, NoHide
+	if (Branch == 0) ;Check if branch location was properly toggled on.
+	{	
+		MsgBox, 48, No Library, Please select your library branch.
+		Return
+	}
+	else
 	{
-		Gui, Submit, NoHide
-		if (Branch == 0) ;Check if branch location was properly toggled on.
-		{	
-			MsgBox, 48, No Library, Please select your library branch.
+		vMyLoc := aBranches[Branch]
+		WinActivate Spiceworks
+		Sleep 500
+		IfWinActive Spiceworks ;Check if Spiceworks widow is open.
+		{ 
+			;Take inputs from the variables in the subrotines, and appends them to a final Send string that fills the web form, using tabs to skip fields.
+			SendInput n ;Spiceworks shortcut for new ticket window.
+			Sleep 1000
+			SendInput %vSuma% {Tab} %vDesc% {Tab} %vUser% {Tab 7} %vCata% {Tab 3} %vMyLoc% {Tab 3} %vSubc% {Tab 3} On-Site {Tab 3} Patron {Tab 7}
 			Return
 		}
 		else
-		{
-			vMyLoc := aBranches[Branch]
-			WinActivate Spiceworks
-			Sleep 500
-			IfWinActive Spiceworks ;Check if Spiceworks widow is open.
-			{ 
-				;Take inputs from the variables in the subrotines, and appends them to a final Send string that fills the web form, using tabs to skip fields.
-				SendInput n ;Spiceworks shortcut for new ticket window.
-				Sleep 1000
-				SendInput %vSuma% {Tab} %vDesc% {Tab} %vUser% {Tab 7} %vCata% {Tab 3} %vMyLoc% {Tab 3} %vSubc% {Tab 3} On-Site {Tab 3} Patron {Tab 7}
-				Return
-			}
-			else
-			{	
-				MsgBox, 48, Spiceworks Offline, Please open a new Spiceworks web interface window.
-				Return
-			}
+		{	
+			MsgBox, 48, Spiceworks Offline, Please open a new Spiceworks web interface window.
+			Return
 		}
-	Return
 	}
+	Return
+}
 Return
 Bprnt: ;Subroutine for Printing button.
 	{	
 		vPrintTally +=
+		Log("Printing ticket.")
 		vSuma := "Release a Print"
 		vDesc := "Showed a patron how to print a document and release it from the Print Release Station."
 		vCata := "Training"
@@ -108,6 +107,7 @@ Bprnt: ;Subroutine for Printing button.
 Blogn: ;Subroutine for Login button.
 	{
 		vLoginTally +=
+		Log("Envisionware login ticket.")
 		vSuma := "Login to Envisionware"
 		vDesc := "Helped a patron with logging into Envisionware."
 		vCata := "Software"
@@ -118,6 +118,7 @@ Blogn: ;Subroutine for Login button.
 Bwifi: ;Subroutine for Wi-Fi button.
 	{
 		vWifiConnectTally +=
+		Log("Wireless connections ticket.")
 		vSuma := "Connect to Wi-Fi"
 		vDesc := "Helped a patron bypass the certificate error and connect to public wi-fi."
 		vCata := "Network"
@@ -128,6 +129,7 @@ Bwifi: ;Subroutine for Wi-Fi button.
 Bwebs: ;Subroutine for website assistance button.
 	{
 		vWebAssistTally +=
+		Log("Website assistance ticket.")
 		vSuma := "Website Assistance"
 		vDesc := "Assisted a patron with navigating a web interface."
 		vCata := "Training"
@@ -138,6 +140,7 @@ Bwebs: ;Subroutine for website assistance button.
 Bsoft: ;Subroutine for Software button.
 	{
 		vSoftwareAssistTally +=
+		Log("Software assistance ticket.")
 		vSuma := "Default Software"
 		vDesc := "Showed a patron how to use some of the more advanced features of our default software."
 		vCata := "Training"
@@ -148,6 +151,7 @@ Bsoft: ;Subroutine for Software button.
 Bcopy: ;Subroutine for copier button.
 	{
 		vCopierTally +=
+		Log("Copier assistance ticket.")
 		vSuma := "Copier Assistance"
 		vDesc := "Helped a patron with copier functions."
 		vCata := "Hardware"
@@ -157,7 +161,8 @@ Bcopy: ;Subroutine for copier button.
 	}	
 Bmail: ;Subroutine for e-mail button.
 	{
-		
+		vEmailTally +=
+		Log("Email functions ticket.")
 		vSuma := "E-Mail Assistance"
 		vDesc := "Helped a patron with e-mail functions."
 		vCata := "Training"
@@ -167,8 +172,10 @@ Bmail: ;Subroutine for e-mail button.
 	}
 Bread: ;Subroutine for e-reader button.
 	{
+		vEreaderTally +=
+		Log("e-Reader assisance ticket.")
 		vSuma := "E-Reader Assistance"
-		vDesc := "Showed a patron how to download books to their e-Reader device."
+		vDesc := "Helped a patron with quesions about e-books and their e-Reader device."
 		vCata := "eReader"
 		vSubc := "Software Assistance"
 		Gosub, Fsend
@@ -176,6 +183,8 @@ Bread: ;Subroutine for e-reader button.
 	}
 Bscar: ;Subroutine for Scareware button
 	{
+		vScarewareTally +=
+		Log("Scareware ticket.")
 		vSuma := "Scareware"
 		vDesc := "Helped clear a scareware prompt."
 		vCata := "Software"
@@ -184,7 +193,9 @@ Bscar: ;Subroutine for Scareware button
 		Return
 	}
 Bscan: ;Subroutine for Scanner functions
-	{		
+	{	
+		vScannerTally +=
+		Log("Scanner assistance ticket.")
 		vSuma := "Scan a Document"
 		vDesc := "Showed a patron how to use the Copier as a scanner."
 		vCata := "Hardware"
@@ -193,7 +204,9 @@ Bscan: ;Subroutine for Scanner functions
 		Return
 	}
 Btime: ;Subroutine for session timer button.
-	{		
+	{	
+		vTimerExtendTally +=
+		Log("Time extention ticket.")
 		vSuma := "Extended Patron Time"
 		vDesc := "Helped a patron with questions about extending their session time"
 		vCata := "Software"
@@ -203,6 +216,8 @@ Btime: ;Subroutine for session timer button.
 	}
 Bwprt: ;Subroutine for print from anywhere.
 	{
+		vWifiPrintTally +=
+		Log("Print from Anywhere ticket.")
 		vSuma := "Print From Anywhere"
 		vDesc := "Showed a patron how to print from their wireless device"
 		vCata := "Training"
@@ -210,12 +225,18 @@ Bwprt: ;Subroutine for print from anywhere.
 		Gosub, Fsend
 		Return
 	}
-Log(msg)
+Log(msg) ;Log Function
 {
 	global ScriptBasename, AppTitle
 	FileAppend, %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%.%A_MSec%%A_Tab%%msg%`n, %ScriptBasename%.log
 	Sleep 50 ; Hopefully gives the filesystem time to write the file before logging again
 	Return
 }
+Total(a,b,c,d,e,f,g,h,i,j,k,l)
+{
+	Return a + b + c + d + e + f + g + h + i + j + k + l
+}
 GuiClose:
-	ExitApp 
+{
+	vGrandTotal := Total(vCopierTally, vEmailTally, vEreaderTally, vLoginTally, vPrintTally, vScannerTally, vScarewareTally, vSoftwareAssistTally, vTimerExtendTally, vWebAssistTally, vWifiConnectTally, vWifiPrintTally)
+}
