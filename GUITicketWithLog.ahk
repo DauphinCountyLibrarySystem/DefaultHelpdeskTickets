@@ -28,7 +28,7 @@ vWifiPrintTally := 0
 
 ;==========INITIALIZING==========
 InputBox,vUser, Log In, Please enter your full user name: ;Recieves HDA name for final ticket, allows for multiple users.
-Log("Starting ticket tracking for user: "vUser)
+Log("== "A_MM "-" A_DD "-" A_YYYY ": Starting ticket tracking for user: " vUser)
 
 ;==========GUI GENERATION==========
 Gui, New, , Common Helpdesk Tickets
@@ -74,21 +74,21 @@ Fsend: ;Final subroutine, that takes in the variable strings, checks that toggle
 	else
 	{
 		vMyLoc := aBranches[Branch]
-		WinActivate Spiceworks
-		Sleep 500
-		IfWinActive Spiceworks ;Check if Spiceworks widow is open.
-		{ 
-			;Take inputs from the variables in the subrotines, and appends them to a final Send string that fills the web form, using tabs to skip fields.
-			SendInput n ;Spiceworks shortcut for new ticket window.
-			Sleep 1000
-			SendInput %vSuma% {Tab} %vDesc% {Tab} %vUser% {Tab 7} %vCata% {Tab 3} %vMyLoc% {Tab 3} %vSubc% {Tab 3} On-Site {Tab 3} Patron {Tab 7}
-			Return
-		}
-		else
-		{	
-			MsgBox, 48, Spiceworks Offline, Please open a new Spiceworks web interface window.
-			Return
-		}
+		;WinActivate Spiceworks
+		;Sleep 500
+		;IfWinActive Spiceworks ;Check if Spiceworks widow is open.
+		;{ 
+		;	;Take inputs from the variables in the subrotines, and appends them to a final Send string that fills the web form, using tabs to skip fields.
+		;	SendInput n ;Spiceworks shortcut for new ticket window.
+		;	Sleep 1000
+		;	SendInput %vSuma% {Tab} %vDesc% {Tab} %vUser% {Tab 7} %vCata% {Tab 3} %vMyLoc% {Tab 3} %vSubc% {Tab 3} On-Site {Tab 3} Patron {Tab 7}
+		;	Return
+		;}
+		;else
+		;{	
+		;	MsgBox, 48, Spiceworks Offline, Please open a new Spiceworks web interface window.
+		;	Return
+		;}
 	}
 	Return
 }
@@ -96,7 +96,7 @@ Return
 Bprnt: ;Subroutine for Printing button.
 	{	
 		vPrintTally++
-		Log("Printing ticket.")
+		Log("-- " A_Hour ":" A_Min " > Printing ticket.")
 		vSuma := "Release a Print"
 		vDesc := "Showed a patron how to print a document and release it from the Print Release Station."
 		vCata := "Training"
@@ -107,7 +107,7 @@ Bprnt: ;Subroutine for Printing button.
 Blogn: ;Subroutine for Login button.
 	{
 		vLoginTally++
-		Log("Envisionware login ticket.")
+		Log("-- " A_Hour ":" A_Min " > Envisionware login ticket.")
 		vSuma := "Login to Envisionware"
 		vDesc := "Helped a patron with logging into Envisionware."
 		vCata := "Software"
@@ -118,7 +118,7 @@ Blogn: ;Subroutine for Login button.
 Bwifi: ;Subroutine for Wi-Fi button.
 	{
 		vWifiConnectTally++
-		Log("Wireless connections ticket.")
+		Log("-- " A_Hour ":" A_Min " > Wireless connections ticket.")
 		vSuma := "Connect to Wi-Fi"
 		vDesc := "Helped a patron bypass the certificate error and connect to public wi-fi."
 		vCata := "Network"
@@ -129,7 +129,7 @@ Bwifi: ;Subroutine for Wi-Fi button.
 Bwebs: ;Subroutine for website assistance button.
 	{
 		vWebAssistTally++
-		Log("Website assistance ticket.")
+		Log("-- " A_Hour ":" A_Min " > Website assistance ticket.")
 		vSuma := "Website Assistance"
 		vDesc := "Assisted a patron with navigating a web interface."
 		vCata := "Training"
@@ -140,7 +140,7 @@ Bwebs: ;Subroutine for website assistance button.
 Bsoft: ;Subroutine for Software button.
 	{
 		vSoftwareAssistTally++
-		Log("Software assistance ticket.")
+		Log("-- " A_Hour ":" A_Min " > Software assistance ticket.")
 		vSuma := "Default Software"
 		vDesc := "Showed a patron how to use some of the more advanced features of our default software."
 		vCata := "Training"
@@ -151,7 +151,7 @@ Bsoft: ;Subroutine for Software button.
 Bcopy: ;Subroutine for copier button.
 	{
 		vCopierTally++
-		Log("Copier assistance ticket.")
+		Log("-- " A_Hour ":" A_Min " > Copier assistance ticket.")
 		vSuma := "Copier Assistance"
 		vDesc := "Helped a patron with copier functions."
 		vCata := "Hardware"
@@ -162,7 +162,7 @@ Bcopy: ;Subroutine for copier button.
 Bmail: ;Subroutine for e-mail button.
 	{
 		vEmailTally++
-		Log("Email functions ticket.")
+		Log("-- " A_Hour ":" A_Min " > Email functions ticket.")
 		vSuma := "E-Mail Assistance"
 		vDesc := "Helped a patron with e-mail functions."
 		vCata := "Training"
@@ -173,7 +173,7 @@ Bmail: ;Subroutine for e-mail button.
 Bread: ;Subroutine for e-reader button.
 	{
 		vEreaderTally++
-		Log("e-Reader assisance ticket.")
+		Log("-- " A_Hour ":" A_Min " > e-Reader assisance ticket.")
 		vSuma := "E-Reader Assistance"
 		vDesc := "Helped a patron with quesions about e-books and their e-Reader device."
 		vCata := "eReader"
@@ -184,7 +184,7 @@ Bread: ;Subroutine for e-reader button.
 Bscar: ;Subroutine for Scareware button
 	{
 		vScarewareTally++
-		Log("Scareware ticket.")
+		Log("-- " A_Hour ":" A_Min " > Scareware ticket.")
 		vSuma := "Scareware"
 		vDesc := "Helped clear a scareware prompt."
 		vCata := "Software"
@@ -195,7 +195,7 @@ Bscar: ;Subroutine for Scareware button
 Bscan: ;Subroutine for Scanner functions
 	{	
 		vScannerTally++
-		Log("Scanner assistance ticket.")
+		Log("-- " A_Hour ":" A_Min " > Scanner assistance ticket.")
 		vSuma := "Scan a Document"
 		vDesc := "Showed a patron how to use the Copier as a scanner."
 		vCata := "Hardware"
@@ -206,7 +206,7 @@ Bscan: ;Subroutine for Scanner functions
 Btime: ;Subroutine for session timer button.
 	{	
 		vTimerExtendTally++
-		Log("Time extention ticket.")
+		Log("-- " A_Hour ":" A_Min " > Time extention ticket.")
 		vSuma := "Extended Patron Time"
 		vDesc := "Helped a patron with questions about extending their session time"
 		vCata := "Software"
@@ -217,7 +217,7 @@ Btime: ;Subroutine for session timer button.
 Bwprt: ;Subroutine for print from anywhere.
 	{
 		vWifiPrintTally++
-		Log("Print from Anywhere ticket.")
+		Log("-- " A_Hour ":" A_Min " > Print from Anywhere ticket.")
 		vSuma := "Print From Anywhere"
 		vDesc := "Showed a patron how to print from their wireless device"
 		vCata := "Training"
@@ -228,7 +228,7 @@ Bwprt: ;Subroutine for print from anywhere.
 Log(msg) ;Log Function
 {
 	global ScriptBasename, AppTitle
-	FileAppend, %A_YYYY%-%A_MM%-%A_DD% %A_Hour%:%A_Min%:%A_Sec%.%A_MSec%%A_Tab%%msg%`n, %ScriptBasename%.log
+	FileAppend,%msg%`n, %ScriptBasename%.log
 	Sleep 50 ; Hopefully gives the filesystem time to write the file before logging again
 	Return
 }
@@ -239,4 +239,6 @@ Total(a,b,c,d,e,f,g,h,i,j,k,l)
 GuiClose:
 {
 	vGrandTotal := Total(vCopierTally, vEmailTally, vEreaderTally, vLoginTally, vPrintTally, vScannerTally, vScarewareTally, vSoftwareAssistTally, vTimerExtendTally, vWebAssistTally, vWifiConnectTally, vWifiPrintTally)
+	Log("== "A_MM "-" A_DD "-" A_YYYY ": " vUser " entered a total of " vGrandTotal " tickets at " vMyLoc " this shift.`n" vCopierTally " copier tickets.`n" vEmailTally " email tickets.`n" vEreaderTally " eReader tickets.`n" vLoginTally " Envisionware tickets.`n" vPrintTally " printing tickets.`n" vScannerTally " scanning tickets.`n" vScarewareTally " scareware tickets.`n" vSoftwareAssistTally " software tickets.`n" vWebAssistTally " website tickets.`n" vWifiConnectTally " wifi connection tickets.`n" vWifiPrintTally " Print from Anywhere tickets.")
+	ExitApp
 }
