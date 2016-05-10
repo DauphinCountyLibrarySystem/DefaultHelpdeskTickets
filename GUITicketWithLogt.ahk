@@ -28,7 +28,7 @@ vWifiPrintTally := 0
 
 ;==========INITIALIZING==========
 InputBox,vUser, Log In, Please enter your full user name: ;Recieves HDA name for final ticket, allows for multiple users.
-Log("Starting ticket tracking for user: "%vUser%)
+Log("Starting ticket tracking for user: "vUser)
 
 ;==========GUI GENERATION==========
 Gui, New, , Common Helpdesk Tickets
@@ -95,7 +95,7 @@ Fsend: ;Final subroutine, that takes in the variable strings, checks that toggle
 Return
 Bprnt: ;Subroutine for Printing button.
 	{	
-		vPrintTally +=
+		vPrintTally++
 		Log("Printing ticket.")
 		vSuma := "Release a Print"
 		vDesc := "Showed a patron how to print a document and release it from the Print Release Station."
@@ -106,7 +106,7 @@ Bprnt: ;Subroutine for Printing button.
 	}
 Blogn: ;Subroutine for Login button.
 	{
-		vLoginTally +=
+		vLoginTally++
 		Log("Envisionware login ticket.")
 		vSuma := "Login to Envisionware"
 		vDesc := "Helped a patron with logging into Envisionware."
@@ -117,7 +117,7 @@ Blogn: ;Subroutine for Login button.
 	}
 Bwifi: ;Subroutine for Wi-Fi button.
 	{
-		vWifiConnectTally +=
+		vWifiConnectTally++
 		Log("Wireless connections ticket.")
 		vSuma := "Connect to Wi-Fi"
 		vDesc := "Helped a patron bypass the certificate error and connect to public wi-fi."
@@ -128,7 +128,7 @@ Bwifi: ;Subroutine for Wi-Fi button.
 	}
 Bwebs: ;Subroutine for website assistance button.
 	{
-		vWebAssistTally +=
+		vWebAssistTally++
 		Log("Website assistance ticket.")
 		vSuma := "Website Assistance"
 		vDesc := "Assisted a patron with navigating a web interface."
@@ -139,7 +139,7 @@ Bwebs: ;Subroutine for website assistance button.
 	}
 Bsoft: ;Subroutine for Software button.
 	{
-		vSoftwareAssistTally +=
+		vSoftwareAssistTally++
 		Log("Software assistance ticket.")
 		vSuma := "Default Software"
 		vDesc := "Showed a patron how to use some of the more advanced features of our default software."
@@ -150,7 +150,7 @@ Bsoft: ;Subroutine for Software button.
 	}
 Bcopy: ;Subroutine for copier button.
 	{
-		vCopierTally +=
+		vCopierTally++
 		Log("Copier assistance ticket.")
 		vSuma := "Copier Assistance"
 		vDesc := "Helped a patron with copier functions."
@@ -161,7 +161,7 @@ Bcopy: ;Subroutine for copier button.
 	}	
 Bmail: ;Subroutine for e-mail button.
 	{
-		vEmailTally +=
+		vEmailTally++
 		Log("Email functions ticket.")
 		vSuma := "E-Mail Assistance"
 		vDesc := "Helped a patron with e-mail functions."
@@ -172,7 +172,7 @@ Bmail: ;Subroutine for e-mail button.
 	}
 Bread: ;Subroutine for e-reader button.
 	{
-		vEreaderTally +=
+		vEreaderTally++
 		Log("e-Reader assisance ticket.")
 		vSuma := "E-Reader Assistance"
 		vDesc := "Helped a patron with quesions about e-books and their e-Reader device."
@@ -183,7 +183,7 @@ Bread: ;Subroutine for e-reader button.
 	}
 Bscar: ;Subroutine for Scareware button
 	{
-		vScarewareTally +=
+		vScarewareTally++
 		Log("Scareware ticket.")
 		vSuma := "Scareware"
 		vDesc := "Helped clear a scareware prompt."
@@ -194,7 +194,7 @@ Bscar: ;Subroutine for Scareware button
 	}
 Bscan: ;Subroutine for Scanner functions
 	{	
-		vScannerTally +=
+		vScannerTally++
 		Log("Scanner assistance ticket.")
 		vSuma := "Scan a Document"
 		vDesc := "Showed a patron how to use the Copier as a scanner."
@@ -205,7 +205,7 @@ Bscan: ;Subroutine for Scanner functions
 	}
 Btime: ;Subroutine for session timer button.
 	{	
-		vTimerExtendTally +=
+		vTimerExtendTally++
 		Log("Time extention ticket.")
 		vSuma := "Extended Patron Time"
 		vDesc := "Helped a patron with questions about extending their session time"
@@ -216,7 +216,7 @@ Btime: ;Subroutine for session timer button.
 	}
 Bwprt: ;Subroutine for print from anywhere.
 	{
-		vWifiPrintTally +=
+		vWifiPrintTally++
 		Log("Print from Anywhere ticket.")
 		vSuma := "Print From Anywhere"
 		vDesc := "Showed a patron how to print from their wireless device"
